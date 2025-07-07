@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}Results | NeuroScan AI{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="p-6 sm:p-10">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Analysis Results</h1>
+                    <p class="mt-1 text-sm text-gray-600">Brain tumor classification report</p>
+                </div>
+                <a href="{{ url_for('upload_file') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    New Analysis
+                </a>
+            </div>
+
+            <div class="mt-8 grid gap-8 lg:grid-cols-2">
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900">MRI Scan</h2>
+                    <div class="mt-4 aspect-w-1 aspect-h-1 bg-gray-100 rounded-lg overflow-hidden">
+                        <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded MRI" class="object-cover w-full h-full">
+                    </div>
+                    <div class="mt-4">
+                        <a href="{{ url_for('static', filename='uploads/' + filename) }}" download class="inline-flex items-center text-sm text-primary-600 hover:text-primary-500">
+                            <svg class="h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Download Original Image
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-lg font-medium text-gray-900">Diagnostic Report</h2>
+                    <div class="mt-4 p-4 border rounded-lg {{ result_color }} border-l-4">
+                        <h3 class="text-lg font-bold">{{ result }}</h3>
+                        <p class="mt-1 text-sm">
+                            {% if result == 'No Tumor Detected' %}
+                            The AI model did not detect any signs of brain tumors in this MRI scan.
+                            {% else %}
+                            The AI model detected a potential {{ result }} in this MRI scan.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="mt-6">
+                        <h3 class="text-sm font-medium text-gray-900">Confidence Level</h3>
+                        <div class="mt-2 flex items-center">
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="progress-bar bg-primary-600 h-2.5 rounded-full" style="width: {{ confidence }}%"></div>
+                            </div>
+                            <span class="ml-3 text-sm font-medium text-gray-900">{{ confidence }}%</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="text-sm font-medium text-gray-900">Possible Tumor Types</h3>
+                        <div class="mt-4 grid gap-4 sm:grid-cols-2">
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
+                                        <svg class="h-6 w-6 text-amber-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="text-sm font-medium text-gray-900">Glioma Tumor</h4>
+                                        <p class="text-xs text-gray-500 mt-1">A type of tumor that occurs in the brain and spinal cord</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
+                                        <svg class="h-6 w-6 text-amber-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="text-sm font-medium text-gray-900">Meningioma Tumor</h4>
+                                        <p class="text-xs text-gray-500 mt-1">A tumor that arises from the meninges</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-amber-100 flex items-center justify-center">
+                                        <svg class="h-6 w-6 text-amber-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="text-sm font-medium text-gray-900">Pituitary Tumor</h4>
+                                        <p class="text-xs text-gray-500 mt-1">An abnormal growth in the pituitary gland</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                                        <svg class="h-6 w-6 text-emerald-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <div class="ml-4">
+                                        <h4 class="text-sm font-medium text-gray-900">No Tumor</h4>
+                                        <p class="text-xs text-gray-500 mt-1">No signs of tumor detected in the scan</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 border-t border-gray-200 pt-6">
+                        <h3 class="text-sm font-medium text-gray-900">Important Notice</h3>
+                        <p class="mt-2 text-sm text-gray-600">
+                            This AI-powered tool is designed to assist healthcare professionals in preliminary analysis. 
+                            It is not a substitute for professional medical diagnosis. Always consult with a qualified 
+                            physician for medical diagnosis and treatment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
